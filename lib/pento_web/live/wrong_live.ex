@@ -2,8 +2,17 @@ defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
 
   def mount(_params, _session, socket) do
+    #user = socket.assigns.current_scope.user
     num_guess = Enum.random(1..10)
-    {:ok, assign(socket, score: 0, message: "Сделайте предположение:", num_guess: num_guess)}
+    {
+      :ok,
+      assign(
+        socket,
+        score: 0,
+        message: "Сделайте предположение:",
+        num_guess: num_guess#,
+        #current_user: user
+        )}
 
   end
 
