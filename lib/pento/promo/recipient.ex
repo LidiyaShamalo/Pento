@@ -11,7 +11,7 @@ defmodule Pento.Promo.Recipient do
   def changeset(recipient, attrs) do
     recipient
     |> cast(attrs, [:first_name, :email])
-    |> validate_required([:first_name, :emal])
+    |> validate_required([:first_name, :email])
     |> validate_format(:email, ~r/@/)
   end
 
