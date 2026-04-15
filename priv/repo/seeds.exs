@@ -12,14 +12,14 @@
 
 alias Pento.{Accounts, Catalog}
 
-# # Начальный пользователь
-# {:ok, user} = Accounts.register_user(%{
-#   email: "seed@example.com",
-#   password: "password123password123"
-# })
+# Начальный пользователь
+{:ok, user} = Accounts.register_user(%{
+  email: "seed@example.com",
+  password: "password123password123"
+})
 
-# Если пользователь существует
-user = Accounts.get_user_by_email("seed@example.com")
+# # Если пользователь существует
+# user = Accounts.get_user_by_email("seed@example.com")
 
 # Область действия для пользователя
 scope = Accounts.get_scope_for_user(user.id)
