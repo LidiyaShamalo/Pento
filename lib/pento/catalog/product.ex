@@ -9,6 +9,7 @@ defmodule Pento.Catalog.Product do
     field :sku, :integer
     field :image_upload, :string
     field :user_id, :id
+    has_many :ratings, Pento.Survey.Rating
 
     timestamps(type: :utc_datetime)
   end
