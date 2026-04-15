@@ -8,6 +8,7 @@ defmodule Pento.Survey do
 
   alias Pento.Survey.Demographic
   alias Pento.Accounts.Scope
+  alias Pento.Survey.Rating
 
   @doc """
   Subscribes to scoped notifications about any demographic changes.
@@ -74,7 +75,7 @@ defmodule Pento.Survey do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_demographic(%Scope{} = scope, attrs) do
+  def create_demographic(%Scope{} = scope, attrs \\ %{}) do
     with {:ok, demographic = %Demographic{}} <-
            %Demographic{}
            |> Demographic.changeset(attrs, scope)
@@ -282,5 +283,16 @@ defmodule Pento.Survey do
     true = rating.user_id == scope.user.id
 
     Rating.changeset(rating, attrs, scope)
+  end
+
+  @doc """
+  Получает демографические данные для заданной области пользователей.
+  Возврат ненадлежащих демографических данных для пользователя.
+  """
+  def get_demographic_by_user(%Scope{} = scope) do
+    Repo.one(
+      from demographic in Demographic,
+      where: demographic.user_id == ^scope.user.id
+    )
   end
 end

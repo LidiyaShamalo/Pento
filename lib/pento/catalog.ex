@@ -44,6 +44,12 @@ defmodule Pento.Catalog do
     Repo.all_by(Product, user_id: scope.user.id)
   end
 
+  def list_products_with_user_rating(user) do
+    Pento.Catalog.Product.Query.base()
+    |> Pento.Catalog.Product.Query.with_user_ratings(user)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single product.
 
