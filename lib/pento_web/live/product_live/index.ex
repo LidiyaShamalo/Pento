@@ -22,6 +22,13 @@ defmodule PentoWeb.ProductLive.Index do
         rows={@streams.products}
         row_click={fn {_id, product} -> JS.navigate(~p"/products/#{product}") end}
       >
+        <:col :let={{_id, product}} label="Image">
+          <img
+            src={product.image_upload || "/images/logo.svg"}
+            alt={product.name}
+            class="w-20 h-30 rounded-lg object-contain"
+          />
+        </:col>
         <:col :let={{_id, product}} label="Name">{product.name}</:col>
         <:col :let={{_id, product}} label="Description">{product.description}</:col>
         <:col :let={{_id, product}} label="Unit price">{product.unit_price}</:col>
