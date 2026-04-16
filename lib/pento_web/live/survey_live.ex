@@ -2,7 +2,7 @@ defmodule PentoWeb.SurveyLive do
   use PentoWeb, :live_view
 
   alias Pento.{Survey, Catalog}
-  alias PentoWeb.DemographicLive.Show
+  alias PentoWeb.DemographicLive.{Show, Form}
   alias __MODULE__.Component
 
   @impl true
