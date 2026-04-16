@@ -1,6 +1,8 @@
 defmodule PentoWeb.RatingLive.Index do
   use Phoenix.Component
   alias PentoWeb.RatingLive
+  alias PentoWeb.RatingLive.Show
+
 
   attr :products, :list, required: true
   attr :current_scope, :map, required: true
@@ -45,7 +47,7 @@ defmodule PentoWeb.RatingLive.Index do
         <RatingLive.Show.stars rating={rating}/>
       <%else%>
         <div>
-          <h3>>%= @product.name %> rating form coming soon!</h3>
+          <h3><%= @product.name %> rating form coming soon!</h3>
         </div>
       <% end %>
     """
