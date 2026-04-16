@@ -1,4 +1,11 @@
-alias PentoWeb.SurveyLive.Component
 <Component.hero content="Опрос">
   Пожалуйста, заполните наш опрос
 </Component.hero>
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <%= if @demographic do %>
+    <Show.details demographic={@demographic} />
+  <% else %>
+    <h3>Demographic form coming soon...</h3>
+  <% end %>
+</div>

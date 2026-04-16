@@ -16,12 +16,6 @@ defmodule PentoWeb.SurveyLive.Component do
         </div>
       </div>
     </div>
-    <pre>
-      <%= inspect(assigns, pretty: true) %>
-      <%= for slot <- @inner_block do %>
-        ID слота: <%= inspect(slot) %>
-      <% end %>
-    </pre>
     """
   end
 
