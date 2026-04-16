@@ -33,5 +33,29 @@ defmodule PentoWeb.DemographicLive.Form do
     changeset = Survey.change_demographic(current_scope, demographic)
     assign_form(socket, changeset)
   end
-  
+
+  @impl true
+  def handle_event("save", %{"demographic" => demographic_params}, socket) do
+    params = params_with_user_id(demographic_params, socket)
+    socket = save_demographic(socket, params)
+    {:noreply, socket}
+  end
+
+  defp params_with_user_id(params, socket) do
+    user_id = socket.assigns.current_scope.user.id
+    Map.put(params, "user_id", user_id)
+  end
+
+  defp save_demographic(socket, demographic_params) do
+    current_scope = socket.assigns.current_scope
+    case Survey.create_demographic(current_scope, demographic_params) do
+      {:ok, demographic} ->
+        send(self(), {:created_demographic, demographic})
+        socket
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        assign_form(socket, changeset)
+    end
+  end
+
 end

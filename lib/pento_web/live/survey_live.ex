@@ -24,4 +24,17 @@ defmodule PentoWeb.SurveyLive do
     products = Catalog.list_products(socket.assigns.current_scope)
     assign(socket, :products, products)
   end
+
+
+  @impl true
+  def handle_info({:created_demographic, demographic}, socket) do
+    socket = handle_demographic_created(socket, demographic)
+    {:noreply, socket}
+  end
+
+  defp handle_demographic_created(socket, demographic) do
+    socket
+    |> put_flash(:info, "Demographic created successfully")
+    |> assign(:demographic, demographic)
+  end
 end
