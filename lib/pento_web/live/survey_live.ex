@@ -4,6 +4,7 @@ defmodule PentoWeb.SurveyLive do
   alias Pento.{Survey, Catalog}
   alias PentoWeb.DemographicLive.{Show, Form}
   alias __MODULE__.Component
+  alias PentoWeb.RatingLive
 
   @impl true
   def mount(_params, _session, socket) do
@@ -21,7 +22,8 @@ defmodule PentoWeb.SurveyLive do
   end
 
   defp assign_products(socket) do
-    products = Catalog.list_products(socket.assigns.current_scope)
+    user = socket.assigns.current_scope.user
+    products = Catalog.list_products_with_user_rating(user)
     assign(socket, :products, products)
   end
 
