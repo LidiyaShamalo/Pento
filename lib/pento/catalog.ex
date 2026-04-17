@@ -150,4 +150,10 @@ defmodule Pento.Catalog do
 
     Product.changeset(product, attrs, scope)
   end
+
+  def products_with_average_ratings do
+    Product.Query.with_average_ratings()
+    |>Repo.all()
+  end
+  
 end
