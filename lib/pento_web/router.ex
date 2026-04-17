@@ -65,6 +65,8 @@ defmodule PentoWeb.Router do
       live "/promo", PromoLive
 
       live "/survey", SurveyLive, :index
+
+      live "/admin/dashboard", Admin.DashboardLive
     end
 
     post "/users/update-password", UserSessionController, :update_password

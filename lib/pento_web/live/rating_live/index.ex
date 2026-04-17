@@ -1,8 +1,6 @@
 defmodule PentoWeb.RatingLive.Index do
   use Phoenix.Component
   alias PentoWeb.RatingLive
-  alias PentoWeb.RatingLive.Show
-
 
   attr :products, :list, required: true
   attr :current_scope, :map, required: true
