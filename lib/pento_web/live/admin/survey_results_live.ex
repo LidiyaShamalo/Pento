@@ -9,6 +9,7 @@ defmodule PentoWeb.Admin.SurveyResultsLive do
     |> assign_products_with_average_ratings()
     |> assign_dataset()
     |> assign_chart()
+    |> assign_chart_svg()
     }
   end
 
@@ -43,5 +44,33 @@ defmodule PentoWeb.Admin.SurveyResultsLive do
     defp make_bar_chart(dataset) do
       Contex.BarChart.new(dataset)
     end
+
+    def assign_chart_svg(%{assigns: %{chart: chart}} = socket) do
+      socket
+      |> assign(:chart_svg, render_bar_chart(chart))
+    end
+
+    defp render_bar_chart(chart) do
+      Contex.Plot.new(500, 400, chart)
+      |> Contex.Plot.titles(title(), subtitle())
+      |> Contex.Plot.axis_labels(x_axis(), y_axis())
+    end
+
+    defp title do
+      "ProductRatings"
+    end
+
+    defp subtitle do
+      "averagestarratingsperproduct"
+    end
+
+    defp x_axis do
+      "products"
+    end
+
+    defp y_axis do
+      "stars"
+    end
+
 
 end
