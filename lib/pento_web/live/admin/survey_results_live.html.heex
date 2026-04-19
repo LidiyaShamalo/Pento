@@ -2,7 +2,6 @@
   <h2 class="font-light text-2xl">Survey Results</h2>
   <div id="survey-results-component">
     <div class="conteiner">
-      ...filters will go here...
       <div class="form-control w-full">
         <.form
           for={%{}}
@@ -17,7 +16,7 @@
           <select name="age_group_filter" id="age_group_filter"
               class="select select-bordered select-sm w-full">
             <%= for age_group <- 
-              ["all", "18nang under", "18 to 25", "25 to 35", "35 and up"] do %>
+              ["all", "18 and under", "18 to 25", "25 to 35", "35 and up"] do %>
               <option value={age_group} selected={@age_group_filter == age_group}>
                 <%=age_group %>
               </option>

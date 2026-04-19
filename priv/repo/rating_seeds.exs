@@ -5,12 +5,15 @@ alias Pento.Survey.{Demographic, Rating}
 alias Pento.Catalog.Product
 
 users =
-  for i <- 1..43, do: Accounts.register_user(%{
-    email: "user #{i}@example.com",
-    password: "passwordpassword"
-  })
+  for i <- 1..43 do
+    case Accounts.register_user(%{email: "user#{i}@example.com", password: "passwordpassword"}) do
+      {:ok, _user} -> :ok
+      {:error, _changeset} -> :already_exists # Игнорируем ошибки, если уже создан
+    end
+  end
 
 user_ids = Repo.all(User) |> Enum.map(& &1.id)
+IO.puts "Найдено пользователей: #{length(user_ids)}"
 
 product_ids = Repo.all(Product) |> Enum.map(& &1.id)
 genders = ["male", "female", "other", "prefer not to say"]
