@@ -151,9 +151,14 @@ defmodule Pento.Catalog do
     Product.changeset(product, attrs, scope)
   end
 
-  def products_with_average_ratings do
+  def products_with_average_ratings(%{
+    age_group_filter: age_group_filter
+  }) do
     Product.Query.with_average_ratings()
-    |>Repo.all()
+    |> Product.Query.join_user()
+    |> Product.Query.join_demographics()
+    |> Product.Query.filter_by_age_group(age_group_filter)
+    |> Repo.all()
   end
-  
+
 end

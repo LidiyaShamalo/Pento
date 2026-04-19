@@ -13,12 +13,25 @@ defmodule PentoWeb.Admin.SurveyResultsLive do
     }
   end
 
-  def assign_products_with_average_ratings(socket) do
+  def assign_age_group_filter(socket) do
     socket
-    |> assign(
-      :products_with_average_ratings,
-      Catalog.products_with_average_ratings()
-    )
+    |> assign(:age_group_filter, "all")
+  end
+
+  def assign_products_with_average_ratings(
+    %{assigns: %{ age_group_filter: age_group_filter}} =
+    socket) do
+      assign(
+        socket,
+        :products_with_average_ratings,
+        Catalog.products_with_average_ratings(
+          %{age_group_filter: age_group_filter}
+        )
+      )
+      # |> assign(
+      #   :products_with_average_ratings,
+      #   Catalog.products_with_average_ratings()
+      # )
   end
 
   def assign_dataset(
