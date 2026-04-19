@@ -95,4 +95,20 @@ defmodule PentoWeb do
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
+
+  defp chart_helpers do
+    quote do
+      import PentoWeb.BarChart
+    end
+  end
+
+  def chart_live do
+    quote do
+      use Phoenix.LiveComponent
+
+      unquote(html_helpers())
+      unquote(chart_helpers())
+    end
+  end
+  
 end
