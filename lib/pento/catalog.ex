@@ -82,9 +82,9 @@ defmodule Pento.Catalog do
   """
   def create_product(%Scope{} = scope, attrs) do
     with {:ok, product = %Product{}} <-
-           %Product{}
-           |> Product.changeset(attrs, scope)
-           |> Repo.insert() do
+            %Product{}
+            |> Product.changeset(attrs, scope)
+            |> Repo.insert() do
       broadcast_product(scope, {:created, product})
       {:ok, product}
     end
@@ -106,9 +106,9 @@ defmodule Pento.Catalog do
     true = product.user_id == scope.user.id
 
     with {:ok, product = %Product{}} <-
-           product
-           |> Product.changeset(attrs, scope)
-           |> Repo.update() do
+            product
+            |> Product.changeset(attrs, scope)
+            |> Repo.update() do
       broadcast_product(scope, {:updated, product})
       {:ok, product}
     end
@@ -130,7 +130,7 @@ defmodule Pento.Catalog do
     true = product.user_id == scope.user.id
 
     with {:ok, product = %Product{}} <-
-           Repo.delete(product) do
+            Repo.delete(product) do
       broadcast_product(scope, {:deleted, product})
       {:ok, product}
     end
@@ -152,12 +152,14 @@ defmodule Pento.Catalog do
   end
 
   def products_with_average_ratings(%{
-    age_group_filter: age_group_filter
-  }) do
+    age_group_filter: age_group_filter,
+    gender_filter: gender_filter
+      }) do
     Product.Query.with_average_ratings()
-    |> Product.Query.join_user()
+    |> Product.Query.join_users()
     |> Product.Query.join_demographics()
     |> Product.Query.filter_by_age_group(age_group_filter)
+    |> Product.Query.filter_by_gender(gender_filter)
     |> Repo.all()
   end
 

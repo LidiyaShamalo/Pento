@@ -4,6 +4,34 @@
     <div class="conteiner">
       <div class="form-control w-full">
         <.form
+              for={%{}}
+              as={:gender_filter}
+              phx-change="gender_filter"
+              phx-target={@myself}
+              id="gender-form"
+            >
+              <label class="label">
+                <span class="label-text text-sm">By gender:</span>
+              </label>
+              <select name="gender_filter" id="gender_filter" 
+                    class="select select-bordered select-sm w-full">
+                <%= for gender <-
+                  [
+                    "all",
+                    "female",
+                    "male",
+                    "other",
+                    "prefer not to say"
+                  ] do %>
+                  <option value={gender} selected={@gender_filter == gender}>
+                    <%= gender %>
+                  </option>
+                <% end %>
+              </select>
+            </.form>
+          </div>
+          <div class="form-control w-full">
+        <.form
           for={%{}}
           as={:age_group_filter}
           phx-change="age_group_filter"
@@ -11,7 +39,7 @@
           id="age-group-form"
         >
           <label class="label">
-            <span class="label-text text-sm">Age group:</span>
+            <span class="label-text text-sm">By age group:</span>
           </label>
           <select name="age_group_filter" id="age_group_filter"
               class="select select-bordered select-sm w-full">

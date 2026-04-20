@@ -30,7 +30,13 @@ defmodule Pento.Catalog.Product.Query do
     |> order_by([p, r], [{:asc, p.name}])
   end
 
-  def join_user(query \\base()) do
+    # 288
+  def with_zero_ratings(query \\base()) do
+    query
+    |> select([p], {p.name, 0})
+  end
+
+  def join_users(query \\base()) do
     query
     |> join(:left, [p, r], u in User, on: r.user_id == u.id)
   end
@@ -85,9 +91,18 @@ defmodule Pento.Catalog.Product.Query do
     query
   end
 
-  # 288
-  def with_zero_ratings(query \\base()) do
+  def filter_by_gender(query \\ base(), filter) do
     query
-    |> select([p], {p.name, 0})
+    |> apply_gender_filter(filter)
   end
+
+  defp apply_gender_filter(query, "all") do
+    query
+  end
+
+  defp apply_gender_filter(query, filter) do
+    query
+    |> where([p, r, u, d], d.gender == ^filter)
+  end
+
 end
