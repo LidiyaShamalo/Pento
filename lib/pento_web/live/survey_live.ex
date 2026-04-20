@@ -5,6 +5,9 @@ defmodule PentoWeb.SurveyLive do
   alias PentoWeb.DemographicLive.{Show, Form}
   alias __MODULE__.Component
   alias PentoWeb.RatingLive
+  alias PentoWeb.Endpoint
+
+  @survey_results_topic "survey_results"
 
   @impl true
   def mount(_params, _session, socket) do
@@ -46,13 +49,29 @@ defmodule PentoWeb.SurveyLive do
     |> assign(:demographic, demographic)
   end
 
-  defp handle_rating_created(socket, product, product_index) do
-    current_products = socket.assigns.products
-    products = List.replace_at(current_products, product_index, product)
+  # defp handle_rating_created(socket, product, product_index) do
+  #   current_products = socket.assigns.products
+  #   products = List.replace_at(current_products, product_index, product)
+
+  #   socket
+  #   |> put_flash(:info, "Рейтинг успешно создан")
+  #   |> assign(:products, products)
+  # end
+
+  defp handle_rating_created(
+        %{assigns: %{products: products}} = socket,
+        updated_product,
+        product_index
+      ) do
+    # I'm new!
+    Endpoint.broadcast(@survey_results_topic, "rating_created", %{})
 
     socket
-    |> put_flash(:info, "Рейтинг успешно создан")
-    |> assign(:products, products)
+    |> put_flash(:info, "Rating submitted successfully")
+    |> assign(
+      :products,
+      List.replace_at(products, product_index, updated_product)
+    )
   end
 
 end
