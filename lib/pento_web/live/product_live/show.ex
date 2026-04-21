@@ -38,16 +38,42 @@ defmodule PentoWeb.ProductLive.Show do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
-    if connected?(socket) do
-      Catalog.subscribe_products(socket.assigns.current_scope)
-    end
+  # def mount(%{"id" => id}, _session, socket) do
+  #   if connected?(socket) do
+  #     Catalog.subscribe_products(socket.assigns.current_scope)
+  #   end
 
-    {:ok,
-     socket
-     |> assign(:page_title, "Show Product")
-     |> assign(:product, Catalog.get_product!(socket.assigns.current_scope, id))}
+  #   {:ok,
+  #    socket
+  #    |> assign(:page_title, "Show Product")
+  #    |> assign(:product, Catalog.get_product!(socket.assigns.current_scope, id))}
+  # end
+  def mount(_params, _session, socket) do
+    {:ok, socket}
   end
+
+  def handle_params(%{"id" => id}, _, socket) do
+    product = Catalog.get_product!(socket.assigns.current_scope, id)
+    maybe_track_user(product, socket)
+
+    {:noreply,
+      socket
+    |> assign(:page_title, page_title(socket.assigns.live_action))
+    |> assign(:product, product)
+  }
+  end
+
+  def maybe_track_user(
+    product,
+    %{assigns: %{live_action: :show, current_scope: current_scope}} =
+    socket
+  ) do
+    if connected?(socket) do
+      Presence.track_user(self(), product, current_scope.user.email)
+    end
+  end
+
+  def maybe_track_user(_product, _socket), do: nil
 
   @impl true
   def handle_info(
@@ -62,13 +88,17 @@ defmodule PentoWeb.ProductLive.Show do
         %{assigns: %{product: %{id: id}}} = socket
       ) do
     {:noreply,
-     socket
-     |> put_flash(:error, "The current product was deleted.")
-     |> push_navigate(to: ~p"/products")}
+      socket
+      |> put_flash(:error, "The current product was deleted.")
+      |> push_navigate(to: ~p"/products")}
   end
 
   def handle_info({type, %Pento.Catalog.Product{}}, socket)
       when type in [:created, :updated, :deleted] do
     {:noreply, socket}
   end
+
+  defp page_title(:show), do: "Show Product"
+  defp page_title(:edit), do: "Edit Product"
+
 end
