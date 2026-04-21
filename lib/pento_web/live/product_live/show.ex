@@ -2,6 +2,7 @@ defmodule PentoWeb.ProductLive.Show do
   use PentoWeb, :live_view
 
   alias Pento.Catalog
+  alias PentoWeb.Presence 
 
   @impl true
   def render(assigns) do
@@ -52,6 +53,7 @@ defmodule PentoWeb.ProductLive.Show do
     {:ok, socket}
   end
 
+  @impl true
   def handle_params(%{"id" => id}, _, socket) do
     product = Catalog.get_product!(socket.assigns.current_scope, id)
     maybe_track_user(product, socket)

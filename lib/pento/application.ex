@@ -12,7 +12,7 @@ defmodule Pento.Application do
       Pento.Repo,
       {DNSCluster, query: Application.get_env(:pento, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Pento.PubSub},
-      PenroWeb.Presence,
+      PentoWeb.Presence,
       #Запустите HTTP-клиент Finch для отправки электронных писем
       {Finch, name: Pento.Fench},
       # Start a worker by calling: Pento.Worker.start_link(arg)
