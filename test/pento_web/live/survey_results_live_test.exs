@@ -82,6 +82,15 @@ defmodule PentoWeb.SurveyResultsLiveTest do
     %{socket: %Phoenix.LiveView.Socket{}}
   end
 
+  defp update_socket(socket, key, value) do
+      %{socket | assigns: Map.merge(socket.assigns, Map.new([{key, value}]))}
+    end
+
+    defp assert_keys(socket, key, value) do
+      assert socket.assigns[key] == value
+      socket
+    end
+
   describe "Socket state" do
     setup [
       :create_user,
@@ -106,9 +115,7 @@ defmodule PentoWeb.SurveyResultsLiveTest do
         |> SurveyResultsLive.assign_gender_filter()
         |> SurveyResultsLive.assign_products_with_average_ratings()
 
-      assert
-        socket.assigns.products_with_average_ratings ==
-          [{"Test Game", 0}]
+      assert socket.assigns.products_with_average_ratings == [{"Test Game", 0}]
     end
 
     test "rating exist", %{
@@ -128,7 +135,42 @@ defmodule PentoWeb.SurveyResultsLiveTest do
       assert socket.assigns.products_with_average_ratings == [
         {"Test Game", 2.0}
       ]
+    end
 
+    test "filtering ratings without transmitting age", %{
+      socket: socket,
+      user: user,
+      product: product,
+      user2: user2
+    } do
+
+      socket =
+        socket
+        |> SurveyResultsLive.assign_age_group_filter()
+
+      assert socket.assigns.age_group_filter == "all"
+    end
+
+    test "ratings are filtered by age group", %{
+      socket: socket,
+      user: user,
+      product: product,
+      user2: user2,
+      scope: scope,
+      scope2: scope2
+    } do
+      create_rating(scope, 2, user, product)
+      create_rating(scope2, 3, user2, product)
+
+      socket
+        |> SurveyResultsLive.assign_age_group_filter()
+        |> assert_keys(:age_group_filter, "all")
+        |> update_socket(:age_group_filter, "18 and under")
+        |> SurveyResultsLive.assign_age_group_filter()
+        |> assert_keys(:age_group_filter, "18 and under")
+        |> SurveyResultsLive.assign_gender_filter()
+        |> SurveyResultsLive.assign_products_with_average_ratings()
+        |> assert_keys(:products_with_average_ratings, [{"Test Game", 2.0}])
     end
   end
 
