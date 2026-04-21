@@ -82,4 +82,23 @@ defmodule PentoWeb.SurveyResultsLiveTest do
     %{socket: %Phoenix.LiveView.Socket{}}
   end
 
+  describe "Socket state" do
+    setup [
+      :create_user,
+      :create_socket,
+      :register_and_log_in_user,
+      :create_product
+    ]
+
+
+    setup %{user: user, scope: scope} do
+      create_demographic(scope, user)
+      user2 = user_fixture(@create_user2_attrs)
+      scope2 = Accounts.Scope.for_user(user2)
+      demographic_fixture(scope2, user2, @create_demogrephic2_attrs)
+      [user2: user2, scope2: scope2]
+    end
+
+  end
+
 end
