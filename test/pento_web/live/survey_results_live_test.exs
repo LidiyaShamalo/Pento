@@ -99,6 +99,37 @@ defmodule PentoWeb.SurveyResultsLiveTest do
       [user2: user2, scope2: scope2]
     end
 
+    test "no rating exist", %{socket: socket} do
+      socket =
+        socket
+        |> SurveyResultsLive.assign_age_group_filter()
+        |> SurveyResultsLive.assign_gender_filter()
+        |> SurveyResultsLive.assign_products_with_average_ratings()
+
+      assert
+        socket.assigns.products_with_average_ratings ==
+          [{"Test Game", 0}]
+    end
+
+    test "rating exist", %{
+      socket: socket,
+      product: product,
+      user: user,
+      scope: scope
+    } do
+      create_rating(scope, 2, user, product)
+
+      socket =
+        socket
+        |> SurveyResultsLive.assign_age_group_filter()
+        |> SurveyResultsLive.assign_gender_filter()
+        |> SurveyResultsLive.assign_products_with_average_ratings()
+
+      assert socket.assigns.products_with_average_ratings == [
+        {"Test Game", 2.0}
+      ]
+
+    end
   end
 
 end
