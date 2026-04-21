@@ -73,4 +73,19 @@ defmodule PentoWeb.AdminDashboardLiveTest do
     %{rating: rating}
   end
 
+  describe "Survey Results" do
+    setup [:register_and_log_in_user, :create_product, :create_user]
+
+    setup %{user: user, product: product, scope: scope} do
+      create_demographic(scope, user)
+      create_rating(scope, 2, user, product)
+
+      user2 = user_fixture(@create_user2_attrs)
+      scope2 = Accounts.Scope.for_user(user2)
+      create_demographic(scope2, user2, @create_demogrephic_over_18_attrs)
+      create_rating(scope2, 3, user2, product)
+      :ok
+    end
+  end
+
 end
