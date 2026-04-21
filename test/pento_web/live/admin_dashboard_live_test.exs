@@ -2,7 +2,7 @@ defmodule PentoWeb.AdminDashboardLiveTest do
   use PentoWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  alias Pento.{Accounts, Surveey, Catalog}
+  alias Pento.{Accounts, Survey, Catalog}
 
   @create_product_attrs %{
     description: "test description",
@@ -11,12 +11,12 @@ defmodule PentoWeb.AdminDashboardLiveTest do
     unit_price: 120.5
   }
 
-  @create_demogrephic_attrs %{
+  @create_demographic_attrs %{
     gender: "female",
     year_of_birth: DateTime.utc_now().year - 15
   }
 
-  @create_demogrephic_over_18_attrs %{
+  @create_demograhic_over_18_attrs %{
     gender: "male",
     year_of_birth: DateTime.utc_now().year - 30
   }
@@ -63,7 +63,7 @@ defmodule PentoWeb.AdminDashboardLiveTest do
     %{user: user}
   end
 
-  defp create_demographic(scope, user, attrs \\@create_demogrephic_attrs) do
+  defp create_demographic(scope, user, attrs \\@create_demographic_attrs) do
     demographic = demographic_fixture(scope, user, attrs)
     %{demographic: demographic}
   end
@@ -82,9 +82,28 @@ defmodule PentoWeb.AdminDashboardLiveTest do
 
       user2 = user_fixture(@create_user2_attrs)
       scope2 = Accounts.Scope.for_user(user2)
-      create_demographic(scope2, user2, @create_demogrephic_over_18_attrs)
+      create_demographic(scope2, user2, @create_demograhic_over_18_attrs)
       create_rating(scope2, 3, user2, product)
       :ok
+    end
+
+    test "it filters by age group", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/admin/dashboard")
+
+        params = %{"age_group_filter" => "18 and under"}
+        view
+        |> element("#age-group-form")
+        |> render_change(params) == "<title>2.00</title>"
+
+        path = "tmp/test_pages/after_filter.html"
+        File.mkdir_p!("tmp/test_pages")
+        File.write!(path, render(view))
+        # Теперь открываем файл, который ТОЧНО записан
+        System.cmd("xdg-open", [path])
+
+        html = render(view)
+        assert html =~ "2.00"
+        refute html =~ "2.50"
     end
   end
 
