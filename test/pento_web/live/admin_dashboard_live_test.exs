@@ -93,18 +93,35 @@ defmodule PentoWeb.AdminDashboardLiveTest do
         params = %{"age_group_filter" => "18 and under"}
         view
         |> element("#age-group-form")
-        |> render_change(params) == "<title>2.00</title>"
+        |> render_change(params)
+
+        html = render(view)
+        assert html =~ "<title>2.00</title>"
+        refute html =~ "2.50"
 
         path = "tmp/test_pages/after_filter.html"
         File.mkdir_p!("tmp/test_pages")
         File.write!(path, render(view))
         # Теперь открываем файл, который ТОЧНО записан
         System.cmd("xdg-open", [path])
-
-        html = render(view)
-        assert html =~ "2.00"
-        refute html =~ "2.50"
     end
+
+    test "it updates to display newly created ratings",
+    %{conn: conn, product: product} do
+      {:ok, view, html} = live(conn, "/admin/dashboard")
+      assert html =~ "<title>2.50</title>"
+
+      user3 = user_fixture(@create_user3_attrs)
+      scope3 = Accounts.Scope.for_user(user3)
+      create_demographic(scope3, user3)
+      create_rating(scope3, 3, user3, product)
+
+      send(view.pid, %{event: "rating_created"})
+      :timer.sleep(2)
+
+      assert render(view) =~"<title>2.67</title>"
+    end
+    
   end
 
 end

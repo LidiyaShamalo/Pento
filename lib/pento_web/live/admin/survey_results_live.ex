@@ -1,6 +1,6 @@
 defmodule PentoWeb.Admin.SurveyResultsLive do
   use PentoWeb, :live_component
-  use PentoWeb, :chart_live
+  import PentoWeb.BarChart
   alias Pento.Catalog
 
   def update(assigns, socket) do
