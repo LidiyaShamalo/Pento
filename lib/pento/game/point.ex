@@ -21,4 +21,18 @@ defmodule Pento.Game.Point do
   def rotate(point, 180), do: point |> reflect |> flip
   def rotate(point, 270), do: point |> flip |> transpose
 
+
+  def prepare(point, rotation, reflected, location) do
+    point
+    |> rotate(rotation)
+    |> maybe_reflect(reflected)
+    |> move(location)
+    |> center
+  end
+
+  def maybe_reflect(point, true), do: reflect(point)
+  def maybe_reflect(point, false), do: point
+
+  
+
 end
