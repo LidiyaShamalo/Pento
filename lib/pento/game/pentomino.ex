@@ -1,4 +1,7 @@
 defmodule Pento.Game.Pentomino do
+  alias Pento.Game.Point
+  alias Pento.Game.Shape
+
   @names [:i, :l, :y, :n, :p, :w, :u, :v, :s, :f, :x, :t]
   @default_location {8, 8}
 
@@ -7,5 +10,33 @@ defmodule Pento.Game.Pentomino do
     rotation: 0,
     reflected: false,
     location: @default_location
-  ] 
+  ]
+
+  def to_shape(pento) do
+    Shape.new(pento.name, pento.rotation, pento.reflected, pento.location)
+  end
+  def rotate(%{rotation: degrees} = p) do
+    %{p | rotation: rem(degrees + 90, 360)}
+  end
+
+  def flip(%{reflected: reflection} = p) do
+    %{p | reflected: not reflection}
+  end
+
+  def up(p) do
+    %{p | location: Point.move(p.location, {0, -1})}
+  end
+
+  def down(p) do
+    %{p | location: Point.move(p.location, {0, 1})}
+  end
+
+  def left(p) do
+    %{p | location: Point.move(p.location, {-1, 0})}
+  end
+
+  def rigth(p) do
+    %{p | location: Point.move(p.location, {1, 0})}
+  end
+
 end
