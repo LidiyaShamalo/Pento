@@ -1,7 +1,7 @@
 defmodule PentoWeb.GameLive.Component do
   use Phoenix.Component
   alias Pento.Game.Pentomino
-  import PentoWeb.GameLive.Colors
+  #import PentoWeb.GameLive.Colors
 
   @width 10
 
@@ -29,6 +29,20 @@ defmodule PentoWeb.GameLive.Component do
 
   defp convert(i) do
     (i - 1) * @width + 2 * @width
+  end
+
+  attr :view_box, :string
+  slot :inner_block, required: true
+
+  def canvas(assigns) do
+    ~H"""
+    <svg viewBox={@view_box}>
+      <defs>
+        <rect id="pento-point" width="10" height="10" />
+      </defs>
+      {render_slot(@inner_block)}
+    </svg>
+    """
   end
 
 end
