@@ -10,12 +10,7 @@ defmodule PentoWeb.GameLive do
     <div class="p-4"> <!-- Обертка для структуры -->
       <section class="mx-auto max-w-4xl px-4 py-8">
         <h1 class="text-3xl font-heavy mb-6">Добро пожаловать в Pento!</h1>
-        <.canvas view_box="0 0 200 70">
-          <.shape
-          points={[{3,2}, {4,3}, {3,3}, {4,2}, {3,4}]}
-          fill="orange"
-          name="p"/>
-        </.canvas>
+          <.palette shape_names={[:i, :l, :y, :n, :p, :w, :u, :v, :s, :f, :x, :t]}/>
       </section>
     </div>
     """

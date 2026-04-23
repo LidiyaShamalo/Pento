@@ -1,7 +1,7 @@
 defmodule PentoWeb.GameLive.Component do
   use Phoenix.Component
   alias Pento.Game.Pentomino
-  #import PentoWeb.GameLive.Colors
+  alias PentoWeb.GameLive.Colors
 
   @width 10
 
@@ -43,6 +43,78 @@ defmodule PentoWeb.GameLive.Component do
       {render_slot(@inner_block)}
     </svg>
     """
+  end
+
+  attr :shape_names, :list, required: true
+  attr :completed_shape_names, :list, default: []
+
+  def palette(assigns) do
+    ~H"""
+    <div id="pento-palette">
+      <svg viewBox="0 0 500 125">
+        <defs>
+          <rect id="palette-point" width="10" height="10" />
+        </defs>
+        <%= for shape <- palette_shapes(@shape_names) do %>
+          <.palette_shape
+            points={shape.points}
+            fill={Colors.color(shape.color, false, shape.name in @completed_shape_names)}
+            name={shape.name}
+          />
+        <% end %>
+      </svg>
+    </div>
+    """
+  end
+
+  attr :points, :list, required: true
+  attr :name, :string, required: true
+  attr :fill, :string, required: true
+
+  def palette_shape(assigns) do
+    ~H"""
+    <%= for {x, y} <- @points do %>
+      <.palette_point x={x} y={y} fill={@fill} name={@name} />
+    <% end %>
+    """
+  end
+
+  attr :x, :integer, required: true
+  attr :y, :integer, required: true
+  attr :fill, :string, required: true
+  attr :name, :string, required: true
+
+  def palette_point(assigns) do
+    ~H"""
+    <use
+      xlink:href="#palette-point"
+      x={convert(@x)}
+      y={convert(@y)}
+      fill={@fill}
+      phx-click="pick"
+      phx-value-name={@name}
+      phx-target="#board-component"
+    />
+    """
+  end
+
+
+  defp palette_shapes(names) do
+    names
+    |> Enum.with_index()
+    |> Enum.map(&place_pento/1)
+  end
+
+
+  defp place_pento({name, i}) do
+    Pentomino.new(name: name, location: location(i))
+    |> Pentomino.to_shape()
+  end
+
+  defp location(i) do
+    x = rem(i, 6) * 4 + 3
+    y = div(i, 6) * 5 + 3
+    {x, y}
   end
 
 end

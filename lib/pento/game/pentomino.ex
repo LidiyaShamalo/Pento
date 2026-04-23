@@ -15,6 +15,8 @@ defmodule Pento.Game.Pentomino do
   def to_shape(pento) do
     Shape.new(pento.name, pento.rotation, pento.reflected, pento.location)
   end
+
+  def new(fields \\ []), do: __struct__(fields)
   def rotate(%{rotation: degrees} = p) do
     %{p | rotation: rem(degrees + 90, 360)}
   end
