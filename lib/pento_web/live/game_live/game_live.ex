@@ -10,15 +10,29 @@ defmodule PentoWeb.GameLive do
     <div class="p-4"> <!-- Обертка для структуры -->
       <section class="mx-auto max-w-4xl px-4 py-8">
         <h1 class="text-3xl font-heavy mb-6">Добро пожаловать в Pento!</h1>
-        <.canvas view_box="0 0 200 30">
-          <.point x={0} y={0} fill="blue" name="a"/>
-          <.point x={1} y={0} fill="green" name="b"/>
-          <.point x={0} y={1} fill="red" name="c"/>
-          <.point x={1} y={1} fill="black" name="d"/>
+        <.canvas view_box="0 0 200 70">
+          <.shape
+          points={[{3,2}, {4,3}, {3,3}, {4,2}, {3,4}]}
+          fill="orange"
+          name="p"/>
         </.canvas>
       </section>
     </div>
     """
   end
+
+  attr :points, :list, required: true
+  attr :name, :string, required: true
+  attr :fill, :string, required: true
+
+  def shape(assigns) do
+    ~H"""
+    <%= for {x, y} <- @points do %>
+      <.point x={x} y={y} fill={@fill} name={@name} />
+    <% end %>
+    """
+  end
+
+
 
 end
