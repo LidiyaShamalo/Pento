@@ -1,7 +1,7 @@
 defmodule Pento.Game.Board do
   alias Pento.Game.{Pentomino, Shape}
 
-  defstruct avtive_pento: nil,
+  defstruct active_pento: nil,
             completed_pentos: [],
             palette: [],
             points: []
@@ -25,12 +25,13 @@ defmodule Pento.Game.Board do
   defp palette(:all), do: [:i, :l, :y, :n, :p, :w, :u, :v, :s, :f, :x, :t]
   defp palette(:small), do: [:u, :v, :p]
 
-  def to_shape(board) do
-    Shape.__struct__(color: :purple, name: :board, points: board.points)
-  end
+  # def to_shape(board) do
+  #   Shape.__struct__(color: :purple, name: :board, points: board.points)
+  # end
 
-  def to_shape(board) do
-    board_shape = to_shape(board)
+  def to_shapes(board) do
+    board_shape = Shape.__struct__(color: :purple, name: :board, points: board.points) #
+    #board_shape = to_shape(board)
     pento_shapes =
       [board.active_pento | board.completed_pentos]
       |> Enum.reverse()

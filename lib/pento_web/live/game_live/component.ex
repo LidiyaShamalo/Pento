@@ -45,6 +45,18 @@ defmodule PentoWeb.GameLive.Component do
     """
   end
 
+  attr :points, :list, required: true
+  attr :name, :string, required: true
+  attr :fill, :string, required: true
+
+  def shape(assigns) do
+    ~H"""
+    <%= for {x, y} <- @points do %>
+      <.point x={x} y={y} fill={@fill} name={@name} />
+    <% end %>
+    """
+  end
+
   attr :shape_names, :list, required: true
   attr :completed_shape_names, :list, default: []
 
