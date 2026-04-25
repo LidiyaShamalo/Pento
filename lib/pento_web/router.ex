@@ -69,6 +69,7 @@ defmodule PentoWeb.Router do
       live "/admin/dashboard", Admin.DashboardLive
 
       live "/game/:puzzle", GameLive
+      live "/play", GameLive.Picker
     end
 
     post "/users/update-password", UserSessionController, :update_password
