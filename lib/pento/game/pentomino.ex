@@ -37,7 +37,7 @@ defmodule Pento.Game.Pentomino do
     %{p | location: Point.move(p.location, {-1, 0})}
   end
 
-  def rigth(p) do
+  def right(p) do
     %{p | location: Point.move(p.location, {1, 0})}
   end
 
