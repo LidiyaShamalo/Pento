@@ -31,6 +31,47 @@
     </script>
   </head>
   <body>
+    <div class="flex items-center gap-4">
+      <a href="/">
+        <svg viewBox="0 0 55 55" class="h-6">
+          <rect x="0" y="0" width="55" height="55" fill="#DDD" />
+          <rect x="10" y="5" width="30" height="30" fill="#689042"></rect>
+          <rect x="10" y="35" width="15" height="15" fill="#689042"></rect>
+        </svg>
+      </a>
+      <p class="px-2 text-[0.8125rem] font-heavy leading-6">
+        Pentominos
+      </p>
+    </div>
+    <ul class="menu menu-horizontal w-full relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
+      <%= if @current_scope do %>
+        <li>
+          <.link href={~p"/products"}>Products</.link>
+        </li>
+        <li>
+          <.link href={~p"/survey"}>Survey</.link>
+        </li>
+        <li>
+          <.link href={~p"/admin/dashboard"}>Панель управления</.link>
+        </li>
+        <li>
+          {@current_scope.user.email}
+        </li>
+        <li>
+          <.link href={~p"/users/settings"}>Settings</.link>
+        </li>
+        <li>
+          <.link href={~p"/users/log-out"} method="delete">Log out</.link>
+        </li>
+      <% else %>
+        <li>
+          <.link href={~p"/users/register"}>Register</.link>
+        </li>
+        <li>
+          <.link href={~p"/users/log-in"}>Log in</.link>
+        </li>
+      <% end %>
+    </ul>
     {@inner_content}
   </body>
 </html>
